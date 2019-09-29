@@ -36597,7 +36597,7 @@ class Carousel extends _react.default.Component {
 
 var _default = Carousel;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"Details.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"ErrorBoundary.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36607,9 +36607,60 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _router = require("@reach/router");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class ErrorBoundary extends _react.default.Component {
+  constructor() {
+    super(...arguments);
+
+    _defineProperty(this, "state", {
+      hasError: false
+    });
+  }
+
+  static getDerivedStateFromError() {
+    return {
+      hasError: true
+    };
+  }
+
+  ComponentDidCatch(error, info) {
+    console.error("ErrorBoundary caught an error", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return _react.default.createElement("h1", null, "There was an error with this listing. ", _react.default.createElement(_router.Link, {
+        to: "/"
+      }, "Click here"), " to go back to home page");
+    }
+
+    return this.props.children;
+  }
+
+}
+
+var _default = ErrorBoundary;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Details.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = DetailsWithErrorBoundary;
+
+var _react = _interopRequireDefault(require("react"));
+
 var _pet = _interopRequireDefault(require("@frontendmasters/pet"));
 
 var _Carousel = _interopRequireDefault(require("./Carousel"));
+
+var _ErrorBoundary = _interopRequireDefault(require("./ErrorBoundary"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36668,9 +36719,10 @@ class Details extends _react.default.Component {
 // debug technique where you can see what reach router is sending
 
 
-var _default = Details;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js"}],"App.js":[function(require,module,exports) {
+function DetailsWithErrorBoundary(props) {
+  return _react.default.createElement(_ErrorBoundary.default, null, _react.default.createElement(Details, props));
+}
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundary":"ErrorBoundary.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -36724,7 +36776,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43701" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46175" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
