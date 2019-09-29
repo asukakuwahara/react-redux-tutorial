@@ -32331,7 +32331,82 @@ const useDropdown = (label, defaultState, options) => {
 
 var _default = useDropdown;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"SearchParams.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"Pet.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Pet;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Pet(_ref) {
+  let name = _ref.name,
+      animal = _ref.animal,
+      breed = _ref.breed,
+      media = _ref.media,
+      location = _ref.location,
+      id = _ref.id;
+  const x = name.toUpperCase(); //in {}, expression is allowed, statement not.
+  //in this case this whole x = name... is a statement while name.toUpperCase() is expression.
+  //ternary operators are expression so allowed
+
+  let hero = "http://placecorgi.com/300/300";
+
+  if (media.length) {
+    hero = media[0].small;
+  }
+
+  return _react.default.createElement("a", {
+    href: `/details/${id}`,
+    className: "pet"
+  }, _react.default.createElement("div", {
+    className: "image-container"
+  }, _react.default.createElement("img", {
+    src: hero,
+    alt: name
+  })), _react.default.createElement("div", {
+    className: "info"
+  }, _react.default.createElement("h1", null, name), _react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`)));
+}
+},{"react":"../node_modules/react/index.js"}],"Results.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Pet = _interopRequireDefault(require("./Pet"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const Results = (_ref) => {
+  let pets = _ref.pets;
+  return _react.default.createElement("div", {
+    className: "search"
+  }, pets.length === 0 ? _react.default.createElement("h1", null, "No Pets Found") : pets.map(pet => _react.default.createElement(_Pet.default, {
+    animal: pet.type,
+    key: pet.id,
+    name: pet.name,
+    breed: pet.breeds.primary,
+    media: pet.photos,
+    location: `${pet.contact.address.city}, ${pet.contact.address.state}`
+  })));
+};
+
+var _default = Results;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./Pet":"Pet.js"}],"SearchParams.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32344,6 +32419,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _pet = _interopRequireWildcard(require("@frontendmasters/pet"));
 
 var _useDropdown5 = _interopRequireDefault(require("./useDropdown"));
+
+var _Results = _interopRequireDefault(require("./Results"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32429,12 +32506,14 @@ const SearchParams = () => {
     value: location,
     placeholder: "Location",
     onChange: e => setLocation(e.target.value)
-  })), _react.default.createElement(AnimalDropdown, null), _react.default.createElement(BreedDropdown, null), _react.default.createElement("button", null, "Submit")));
+  })), _react.default.createElement(AnimalDropdown, null), _react.default.createElement(BreedDropdown, null), _react.default.createElement("button", null, "Submit")), _react.default.createElement(_Results.default, {
+    pets: pets
+  }));
 };
 
 var _default = SearchParams;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./useDropdown":"useDropdown.js"}],"App.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./useDropdown":"useDropdown.js","./Results":"Results.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -32480,7 +32559,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42165" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44035" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
