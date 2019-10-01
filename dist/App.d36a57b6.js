@@ -36699,7 +36699,42 @@ class ErrorBoundary extends _react.default.Component {
 
 var _default = ErrorBoundary;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Details.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"modal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactDom = require("react-dom");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const Modal = (_ref) => {
+  let children = _ref.children;
+  const elRef = (0, _react.useRef)(null);
+
+  if (!elRef.current) {
+    const div = document.createElement("div");
+    elRef.current = div;
+  }
+
+  (0, _react.useEffect)(() => {
+    const modalRoot = document.getElementById("modal");
+    modalRoot.appendChild(elRef.current);
+    return () => modalRoot.removeChild(elRef.current);
+  }, []);
+  return (0, _reactDom.createPortal)(_react.default.createElement("div", null, children), elRef.current);
+};
+
+var _default = Modal;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js"}],"Details.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36716,6 +36751,10 @@ var _Carousel = _interopRequireDefault(require("./Carousel"));
 var _ErrorBoundary = _interopRequireDefault(require("./ErrorBoundary"));
 
 var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
+
+var _modal = _interopRequireDefault(require("./modal"));
+
+var _router = require("@reach/router");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36734,8 +36773,17 @@ class Details extends _react.default.Component {
     super(...arguments);
 
     _defineProperty(this, "state", {
-      loading: true
+      loading: true,
+      showModal: false
     });
+
+    _defineProperty(this, "toggleModal", () => {
+      this.setState({
+        showModal: !this.state.showModal
+      });
+    });
+
+    _defineProperty(this, "adopt", () => (0, _router.navigate)(this.state.url));
   }
 
   componentDidMount() {
@@ -36747,6 +36795,7 @@ class Details extends _react.default.Component {
         location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
         description: animal.description,
         media: animal.photos,
+        url: animal.url,
         breed: animal.breeds.primary,
         loading: false
       });
@@ -36764,7 +36813,8 @@ class Details extends _react.default.Component {
           location = _this$state.location,
           description = _this$state.description,
           name = _this$state.name,
-          media = _this$state.media;
+          media = _this$state.media,
+          showModal = _this$state.showModal;
     return _react.default.createElement("div", {
       className: "details"
     }, _react.default.createElement(_Carousel.default, {
@@ -36774,11 +36824,16 @@ class Details extends _react.default.Component {
           theme = _ref3[0];
 
       return _react.default.createElement("button", {
+        onClick: this.toggleModal,
         style: {
           backgroundColor: theme
         }
       }, "Adopt ", name);
-    }), _react.default.createElement("p", null, description)));
+    }), _react.default.createElement("p", null, description), showModal ? _react.default.createElement(_modal.default, null, _react.default.createElement("div", null, _react.default.createElement("h1", null, "Would you like to adopt ", name, "?"), _react.default.createElement("div", null, _react.default.createElement("button", {
+      onClick: this.adopt
+    }, "Yes"), _react.default.createElement("button", {
+      onClick: this.toggleModal
+    }, "No, I am a monster")))) : null));
   }
 
 } // const Details = props => {
@@ -36794,7 +36849,7 @@ class Details extends _react.default.Component {
 function DetailsWithErrorBoundary(props) {
   return _react.default.createElement(_ErrorBoundary.default, null, _react.default.createElement(Details, props));
 }
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundary":"ErrorBoundary.js","./ThemeContext":"ThemeContext.js"}],"App.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundary":"ErrorBoundary.js","./ThemeContext":"ThemeContext.js","./modal":"modal.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireWildcard(require("react"));
